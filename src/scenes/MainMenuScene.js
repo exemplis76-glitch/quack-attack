@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import SaveSystem from '../systems/SaveSystem.js';
+import SoundFX from '../utils/SoundFX.js';
+import MusicPlayer from '../utils/MusicPlayer.js';
 
 export default class MainMenuScene extends Phaser.Scene {
   constructor() {
@@ -7,6 +9,7 @@ export default class MainMenuScene extends Phaser.Scene {
   }
 
   create() {
+    MusicPlayer.play('menu');
     const { width, height } = this.scale;
 
     // Background
@@ -30,7 +33,36 @@ export default class MainMenuScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // Ducky display
-    this.add.image(width / 2, 170, 'fireDucky').setScale(3);
+    const ducky = this.add.image(width / 2, 170, 'fireDucky').setScale(3);
+
+    // Secret beach mode - only available after completing all 10 levels
+    if (SaveSystem.areAllLevelsCompleted()) {
+      ducky.setInteractive({ useHandCursor: true });
+      ducky.on('pointerdown', () => {
+        SoundFX.play('menuClick');
+        this.scene.start('BeachMenuScene');
+      });
+
+      // Arrow pointing at the bird with caption
+      const arrow = this.add.graphics();
+      arrow.lineStyle(2, 0xffffff, 0.9);
+      arrow.beginPath();
+      arrow.moveTo(width / 2 + 80, 140);
+      arrow.lineTo(width / 2 + 52, 162);
+      arrow.strokePath();
+      arrow.fillStyle(0xffffff, 0.9);
+      arrow.fillTriangle(
+        width / 2 + 52, 162,
+        width / 2 + 60, 152,
+        width / 2 + 62, 162
+      );
+      this.add.text(width / 2 + 115, 132, 'nothing here', {
+        fontSize: '12px',
+        color: '#ffffff',
+        fontFamily: 'monospace',
+        fontStyle: 'italic',
+      }).setOrigin(0.5);
+    }
 
     // Total duckies
     const totalDuckies = SaveSystem.getTotalDuckies();
@@ -64,6 +96,7 @@ export default class MainMenuScene extends Phaser.Scene {
     diffText.on('pointerover', () => diffText.setStyle({ backgroundColor: '#444477' }));
     diffText.on('pointerout', () => diffText.setStyle({ backgroundColor: '#333355' }));
     diffText.on('pointerdown', () => {
+      SoundFX.play('menuClick');
       const difficulties = ['easy', 'medium', 'hard'];
       const currentIdx = difficulties.indexOf(SaveSystem.getDifficulty());
       const nextIdx = (currentIdx + 1) % difficulties.length;
@@ -90,7 +123,7 @@ export default class MainMenuScene extends Phaser.Scene {
 
     btn.on('pointerover', () => btn.setStyle({ backgroundColor: '#4466cc' }));
     btn.on('pointerout', () => btn.setStyle({ backgroundColor: '#3355aa' }));
-    btn.on('pointerdown', callback);
+    btn.on('pointerdown', () => { SoundFX.play('menuClick'); callback(); });
 
     return btn;
   }

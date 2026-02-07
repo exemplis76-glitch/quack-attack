@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import SoundFX from '../utils/SoundFX.js';
 
 export default class GameOverScene extends Phaser.Scene {
   constructor() {
@@ -7,6 +8,7 @@ export default class GameOverScene extends Phaser.Scene {
 
   init(data) {
     this.levelNumber = data.levelNumber || 1;
+    this.mode = data.mode || 'normal';
   }
 
   create() {
@@ -26,7 +28,10 @@ export default class GameOverScene extends Phaser.Scene {
       fontFamily: 'monospace',
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, 200, 'The octopuses got you!', {
+    const flavorText = this.mode === 'beach'
+      ? 'The crabs got you!'
+      : 'The octopuses got you!';
+    this.add.text(width / 2, 200, flavorText, {
       fontSize: '14px',
       color: '#aaaaaa',
       fontFamily: 'monospace',
@@ -34,7 +39,7 @@ export default class GameOverScene extends Phaser.Scene {
 
     // Buttons
     this.createButton(width / 2, 280, 'RETRY', () => {
-      this.scene.start('GameScene', { level: this.levelNumber });
+      this.scene.start('GameScene', { level: this.levelNumber, mode: this.mode });
     });
 
     this.createButton(width / 2, 330, 'CHARACTER STORE', () => {
@@ -42,7 +47,7 @@ export default class GameOverScene extends Phaser.Scene {
     });
 
     this.createButton(width / 2, 380, 'HOME', () => {
-      this.scene.start('MainMenuScene');
+      this.scene.start(this.mode === 'beach' ? 'BeachMenuScene' : 'MainMenuScene');
     });
   }
 
@@ -57,6 +62,6 @@ export default class GameOverScene extends Phaser.Scene {
 
     btn.on('pointerover', () => btn.setStyle({ backgroundColor: '#4466cc' }));
     btn.on('pointerout', () => btn.setStyle({ backgroundColor: '#3355aa' }));
-    btn.on('pointerdown', callback);
+    btn.on('pointerdown', () => { SoundFX.play('menuClick'); callback(); });
   }
 }

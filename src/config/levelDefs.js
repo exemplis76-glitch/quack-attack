@@ -7,7 +7,7 @@ export const LEVELS = [
     octopusSpeed: 40,
     collectibleCount: 15,
     platforms: [
-      { x: 5, y: 12, w: 70, h: 1 },   // main ground
+      { x: 2, y: 12, w: 73, h: 1 },   // main ground
       { x: 15, y: 9, w: 5, h: 1 },     // small platform
       { x: 30, y: 10, w: 4, h: 1 },
       { x: 45, y: 8, w: 6, h: 1 },

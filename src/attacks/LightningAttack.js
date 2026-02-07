@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import Lightning from '../entities/Lightning.js';
+import SoundFX from '../utils/SoundFX.js';
 
 export default class LightningAttack {
   execute(scene, player) {
+    SoundFX.play('lightning');
     const strikeRadius = 200;
     const enemies = scene.enemyGroup.getChildren().filter((e) => !e.isDead);
 

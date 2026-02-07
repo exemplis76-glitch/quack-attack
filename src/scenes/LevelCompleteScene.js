@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import SaveSystem from '../systems/SaveSystem.js';
+import SoundFX from '../utils/SoundFX.js';
 
 export default class LevelCompleteScene extends Phaser.Scene {
   constructor() {
@@ -10,6 +11,7 @@ export default class LevelCompleteScene extends Phaser.Scene {
     this.levelNumber = data.levelNumber || 1;
     this.duckiesCollected = data.duckiesCollected || 0;
     this.totalDuckies = data.totalDuckies || 0;
+    this.mode = data.mode || 'normal';
   }
 
   create() {
@@ -53,12 +55,12 @@ export default class LevelCompleteScene extends Phaser.Scene {
     const spacing = 50;
 
     this.createButton(width / 2, buttonY, 'REDO LEVEL', () => {
-      this.scene.start('GameScene', { level: this.levelNumber });
+      this.scene.start('GameScene', { level: this.levelNumber, mode: this.mode });
     });
 
     if (this.levelNumber < 10) {
       this.createButton(width / 2, buttonY + spacing, 'NEXT LEVEL', () => {
-        this.scene.start('GameScene', { level: this.levelNumber + 1 });
+        this.scene.start('GameScene', { level: this.levelNumber + 1, mode: this.mode });
       });
     }
 
@@ -67,7 +69,7 @@ export default class LevelCompleteScene extends Phaser.Scene {
     });
 
     this.createButton(width / 2, buttonY + spacing * 3, 'HOME', () => {
-      this.scene.start('MainMenuScene');
+      this.scene.start(this.mode === 'beach' ? 'BeachMenuScene' : 'MainMenuScene');
     });
   }
 
@@ -82,6 +84,6 @@ export default class LevelCompleteScene extends Phaser.Scene {
 
     btn.on('pointerover', () => btn.setStyle({ backgroundColor: '#4466cc' }));
     btn.on('pointerout', () => btn.setStyle({ backgroundColor: '#3355aa' }));
-    btn.on('pointerdown', callback);
+    btn.on('pointerdown', () => { SoundFX.play('menuClick'); callback(); });
   }
 }

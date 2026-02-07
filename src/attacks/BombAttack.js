@@ -1,7 +1,9 @@
 import Bomb from '../entities/Bomb.js';
+import SoundFX from '../utils/SoundFX.js';
 
 export default class BombAttack {
   execute(scene, player) {
+    SoundFX.play('bomb');
     const enemies = scene.enemyGroup.getChildren().filter((e) => !e.isDead);
 
     // Drop bombs from sky on all enemies on screen

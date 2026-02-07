@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { PLAYER_SPEED, JUMP_FORCE, INVINCIBILITY_DURATION } from '../config/gameConfig.js';
+import SoundFX from '../utils/SoundFX.js';
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, characterId) {
@@ -35,6 +36,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     if (cursors.up.isDown && this.body.onFloor()) {
       this.setVelocityY(JUMP_FORCE);
+      SoundFX.play('jump');
     }
   }
 
@@ -42,9 +44,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.isSliding) return null;
 
     this.isSliding = true;
+    SoundFX.play('slide');
 
     const dir = this.facingRight ? 1 : -1;
-    this.setVelocityX(dir * PLAYER_SPEED * 2);
+    this.setVelocityX(dir * PLAYER_SPEED * 1.2);
 
     // Create attack hitbox
     const hitboxX = this.x + dir * 20;
@@ -52,7 +55,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     this.scene.physics.add.existing(hitbox, false);
     hitbox.body.setAllowGravity(false);
 
-    this.scene.time.delayedCall(300, () => {
+    this.scene.time.delayedCall(200, () => {
       hitbox.destroy();
       this.isSliding = false;
     });
@@ -64,17 +67,24 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     if (this.isInvincible) return;
     this.isInvincible = true;
 
-    this.scene.tweens.add({
-      targets: this,
-      alpha: { from: 0.3, to: 1 },
-      duration: 100,
-      repeat: Math.floor(INVINCIBILITY_DURATION / 200),
-      yoyo: true,
+    // Flash red/white tint instead of going transparent
+    let tintOn = true;
+    this.invincibilityTimer = this.scene.time.addEvent({
+      delay: 100,
+      repeat: Math.floor(INVINCIBILITY_DURATION / 100) - 1,
+      callback: () => {
+        if (tintOn) {
+          this.setTint(0xff4444);
+        } else {
+          this.clearTint();
+        }
+        tintOn = !tintOn;
+      },
     });
 
     this.scene.time.delayedCall(INVINCIBILITY_DURATION, () => {
       this.isInvincible = false;
-      this.setAlpha(1);
+      this.clearTint();
     });
   }
 

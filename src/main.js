@@ -9,6 +9,12 @@ import GameScene from './scenes/GameScene.js';
 import UIScene from './scenes/UIScene.js';
 import LevelCompleteScene from './scenes/LevelCompleteScene.js';
 import GameOverScene from './scenes/GameOverScene.js';
+import BeachMenuScene from './scenes/BeachMenuScene.js';
+import BeachLevelSelectScene from './scenes/BeachLevelSelectScene.js';
+import BeachCharacterStoreScene from './scenes/BeachCharacterStoreScene.js';
+import LavaMenuScene from './scenes/LavaMenuScene.js';
+import LavaLevelSelectScene from './scenes/LavaLevelSelectScene.js';
+import LavaCharacterStoreScene from './scenes/LavaCharacterStoreScene.js';
 
 const config = {
   type: Phaser.AUTO,
@@ -37,6 +43,12 @@ const config = {
     UIScene,
     LevelCompleteScene,
     GameOverScene,
+    BeachMenuScene,
+    BeachLevelSelectScene,
+    BeachCharacterStoreScene,
+    LavaMenuScene,
+    LavaLevelSelectScene,
+    LavaCharacterStoreScene,
   ],
 };
 

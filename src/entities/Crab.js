@@ -1,9 +1,9 @@
 import Phaser from 'phaser';
 import { TILE_SIZE } from '../config/gameConfig.js';
 
-export default class Octopus extends Phaser.Physics.Arcade.Sprite {
+export default class Crab extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, speed, patrolDist) {
-    super(scene, x, y, 'octopus');
+    super(scene, x, y, 'crab');
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -24,21 +24,18 @@ export default class Octopus extends Phaser.Physics.Arcade.Sprite {
   update() {
     if (this.isDead || this.frozen) return;
 
-    // Check patrol boundaries
     if (this.x > this.startX + this.patrolDist) {
       this.direction = -1;
     } else if (this.x < this.startX - this.patrolDist) {
       this.direction = 1;
     }
 
-    // Check wall collisions
     if (this.body.blocked.left) {
       this.direction = 1;
     } else if (this.body.blocked.right) {
       this.direction = -1;
     }
 
-    // Always apply velocity based on direction
     this.setVelocityX(this.speed * this.direction);
     this.setFlipX(this.direction === -1);
   }

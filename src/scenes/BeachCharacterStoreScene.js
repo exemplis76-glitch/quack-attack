@@ -1,22 +1,28 @@
 import Phaser from 'phaser';
-import { CHARACTERS, CLASSIC_ORDER } from '../config/characterDefs.js';
+import { CHARACTERS, BEACH_ORDER } from '../config/characterDefs.js';
 import SaveSystem from '../systems/SaveSystem.js';
 import SoundFX from '../utils/SoundFX.js';
 import MusicPlayer from '../utils/MusicPlayer.js';
 
-export default class CharacterStoreScene extends Phaser.Scene {
+export default class BeachCharacterStoreScene extends Phaser.Scene {
   constructor() {
-    super('CharacterStoreScene');
+    super('BeachCharacterStoreScene');
   }
 
   create() {
     MusicPlayer.play('menu');
     const { width, height } = this.scale;
-    this.cameras.main.setBackgroundColor('#1a1a2e');
 
-    this.add.text(width / 2, 30, 'CHARACTER STORE', {
+    // Beach-themed background
+    const bg = this.add.graphics();
+    bg.fillGradientStyle(0x4fc3f7, 0x4fc3f7, 0x1565c0, 0x1565c0, 1);
+    bg.fillRect(0, 0, width, height * 0.25);
+    bg.fillGradientStyle(0xf0d9a0, 0xf0d9a0, 0xe8c878, 0xe8c878, 1);
+    bg.fillRect(0, height * 0.25, width, height * 0.75);
+
+    this.add.text(width / 2, 30, 'BEACH SHOP', {
       fontSize: '28px',
-      color: '#ffdd00',
+      color: '#1a1a2e',
       fontFamily: 'monospace',
       fontStyle: 'bold',
     }).setOrigin(0.5);
@@ -26,7 +32,7 @@ export default class CharacterStoreScene extends Phaser.Scene {
     this.add.image(width / 2 - 50, 65, 'miniDucky').setScale(1.2);
     this.duckyCountText = this.add.text(width / 2 - 35, 58, `x ${totalDuckies}`, {
       fontSize: '16px',
-      color: '#ffdd00',
+      color: '#996600',
       fontFamily: 'monospace',
     });
 
@@ -34,10 +40,10 @@ export default class CharacterStoreScene extends Phaser.Scene {
     const selectedChar = saveData.selectedCharacter;
 
     const cardWidth = 140;
-    const totalWidth = CLASSIC_ORDER.length * cardWidth;
+    const totalWidth = BEACH_ORDER.length * cardWidth;
     const startX = (width - totalWidth) / 2 + cardWidth / 2;
 
-    CLASSIC_ORDER.forEach((charId, idx) => {
+    BEACH_ORDER.forEach((charId, idx) => {
       const char = CHARACTERS[charId];
       const x = startX + idx * cardWidth;
       const y = 200;
@@ -45,10 +51,10 @@ export default class CharacterStoreScene extends Phaser.Scene {
       const isUnlocked = saveData.unlockedCharacters.includes(charId);
       const isSelected = charId === selectedChar;
 
-      // Card background
-      const cardColor = isSelected ? 0x3355aa : isUnlocked ? 0x2a2a4e : 0x1a1a2e;
+      // Card background - sandy/ocean tones
+      const cardColor = isSelected ? 0x1565c0 : isUnlocked ? 0xc9a96e : 0xa08050;
       const card = this.add.rectangle(x, y, 120, 200, cardColor);
-      card.setStrokeStyle(2, isSelected ? 0xffdd00 : 0x555577);
+      card.setStrokeStyle(2, isSelected ? 0xffdd00 : 0x8d6e63);
 
       // Character sprite
       this.add.image(x, y - 55, charId).setScale(2);
@@ -64,7 +70,7 @@ export default class CharacterStoreScene extends Phaser.Scene {
       // Description
       this.add.text(x, y + 10, char.description, {
         fontSize: '8px',
-        color: '#aaaaaa',
+        color: '#eeeeee',
         fontFamily: 'monospace',
         wordWrap: { width: 110 },
         align: 'center',
@@ -83,7 +89,7 @@ export default class CharacterStoreScene extends Phaser.Scene {
           fontSize: '12px',
           color: '#ffffff',
           fontFamily: 'monospace',
-          backgroundColor: '#3355aa',
+          backgroundColor: '#1565c0',
           padding: { x: 10, y: 4 },
         }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
@@ -96,7 +102,7 @@ export default class CharacterStoreScene extends Phaser.Scene {
         const costText = `${char.cost} duckies`;
         const canAfford = totalDuckies >= char.cost;
 
-        const buyBtn = this.add.text(x, y + 55, costText, {
+        this.add.text(x, y + 55, costText, {
           fontSize: '10px',
           color: canAfford ? '#ffdd00' : '#888888',
           fontFamily: 'monospace',
@@ -107,7 +113,7 @@ export default class CharacterStoreScene extends Phaser.Scene {
             fontSize: '12px',
             color: '#ffffff',
             fontFamily: 'monospace',
-            backgroundColor: '#228833',
+            backgroundColor: '#2e7d32',
             padding: { x: 10, y: 4 },
           }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
@@ -133,15 +139,15 @@ export default class CharacterStoreScene extends Phaser.Scene {
       fontSize: '18px',
       color: '#ffffff',
       fontFamily: 'monospace',
-      backgroundColor: '#333355',
+      backgroundColor: '#1565c0',
       padding: { x: 20, y: 8 },
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
 
-    backBtn.on('pointerover', () => backBtn.setStyle({ backgroundColor: '#444477' }));
-    backBtn.on('pointerout', () => backBtn.setStyle({ backgroundColor: '#333355' }));
+    backBtn.on('pointerover', () => backBtn.setStyle({ backgroundColor: '#1976d2' }));
+    backBtn.on('pointerout', () => backBtn.setStyle({ backgroundColor: '#1565c0' }));
     backBtn.on('pointerdown', () => {
       SoundFX.play('menuClick');
-      this.scene.start('MainMenuScene');
+      this.scene.start('BeachMenuScene');
     });
   }
 }

@@ -44,6 +44,51 @@ export const CHARACTERS = {
     description: 'Randomly uses Bubble, Lightning, or Bomb!',
     unlocked: false,
   },
+  surfDucky: {
+    id: 'surfDucky',
+    name: 'Surf Ducky',
+    color: 0x00bcd4,
+    specialAttack: 'SurfAttack',
+    cost: 125,
+    description: 'Rides a tidal wave that wipes out everything!',
+    unlocked: false,
+  },
+  coconutDucky: {
+    id: 'coconutDucky',
+    name: 'Coconut Ducky',
+    color: 0x8d6e63,
+    specialAttack: 'CoconutAttack',
+    cost: 150,
+    description: 'Rains coconuts on ALL enemies in the level!',
+    unlocked: false,
+  },
+  sandDucky: {
+    id: 'sandDucky',
+    name: 'Sand Ducky',
+    color: 0xffd54f,
+    specialAttack: 'SandstormAttack',
+    cost: 175,
+    description: 'Sandstorm freezes every enemy for 5 seconds!',
+    unlocked: false,
+  },
+  sharkDucky: {
+    id: 'sharkDucky',
+    name: 'Shark Ducky',
+    color: 0x546e7a,
+    specialAttack: 'SharkAttack',
+    cost: 200,
+    description: 'Shark zooms through enemies twice!',
+    unlocked: false,
+  },
+  seashellDucky: {
+    id: 'seashellDucky',
+    name: 'Seashell Ducky',
+    color: 0xf48fb1,
+    specialAttack: 'SeashellAttack',
+    cost: 225,
+    description: 'Sonic blast kills nearby, blows away the rest!',
+    unlocked: false,
+  },
 };
 
 export const CHARACTER_ORDER = [
@@ -52,4 +97,25 @@ export const CHARACTER_ORDER = [
   'lightningDucky',
   'bombingDucky',
   'luckyDucky',
+  'surfDucky',
+  'coconutDucky',
+  'sandDucky',
+  'sharkDucky',
+  'seashellDucky',
+];
+
+export const CLASSIC_ORDER = [
+  'fireDucky',
+  'bubbleDucky',
+  'lightningDucky',
+  'bombingDucky',
+  'luckyDucky',
+];
+
+export const BEACH_ORDER = [
+  'surfDucky',
+  'coconutDucky',
+  'sandDucky',
+  'sharkDucky',
+  'seashellDucky',
 ];

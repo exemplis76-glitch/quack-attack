@@ -68,6 +68,47 @@ export default class UIScene extends Phaser.Scene {
       this.duckyText.setText(`x ${count}`);
     });
 
+    // God mode indicator
+    this.godModeText = this.add.text(400, 440, 'GOD MODE', {
+      fontSize: '18px',
+      color: '#ff0000',
+      fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 3,
+    }).setOrigin(0.5, 1).setVisible(false);
+
+    // Fly mode toggle button (below god mode text)
+    this.flyButton = this.add.text(400, 458, '[ FLY: OFF ]', {
+      fontSize: '14px',
+      color: '#ffaa00',
+      fontFamily: 'monospace',
+      stroke: '#000000',
+      strokeThickness: 3,
+      backgroundColor: '#333333',
+      padding: { x: 8, y: 4 },
+    }).setOrigin(0.5, 1).setVisible(false).setInteractive({ useHandCursor: true });
+
+    this.flyEnabled = false;
+    this.flyButton.on('pointerdown', () => {
+      this.flyEnabled = !this.flyEnabled;
+      this.flyButton.setText(this.flyEnabled ? '[ FLY: ON ]' : '[ FLY: OFF ]');
+      this.flyButton.setColor(this.flyEnabled ? '#00ff00' : '#ffaa00');
+      const gameScene = this.scene.get('GameScene');
+      gameScene.toggleFlyMode(this.flyEnabled);
+    });
+
+    this.events.on('god-mode-changed', (active) => {
+      this.godModeText.setVisible(active);
+      this.flyButton.setVisible(active);
+      if (!active && this.flyEnabled) {
+        this.flyEnabled = false;
+        this.flyButton.setText('[ FLY: OFF ]');
+        this.flyButton.setColor('#ffaa00');
+        const gameScene = this.scene.get('GameScene');
+        gameScene.toggleFlyMode(false);
+      }
+    });
+
     this.events.on('special-earned', () => {
       // Flash the special text
       this.tweens.add({

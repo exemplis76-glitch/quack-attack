@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
 import { TILE_SIZE } from '../config/gameConfig.js';
+import DragonFireball from './DragonFireball.js';
+import SoundFX from '../utils/SoundFX.js';
 
-export default class Octopus extends Phaser.Physics.Arcade.Sprite {
+export default class MagmaDragon extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, speed, patrolDist) {
-    super(scene, x, y, 'octopus');
+    super(scene, x, y, 'magmaDragon');
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -14,6 +16,8 @@ export default class Octopus extends Phaser.Physics.Arcade.Sprite {
     this.direction = 1;
     this.frozen = false;
     this.isDead = false;
+    this.lastFireTime = 0;
+    this.fireCooldown = 2000;
 
     this.body.setSize(24, 28);
     this.body.setOffset(4, 4);
@@ -21,26 +25,42 @@ export default class Octopus extends Phaser.Physics.Arcade.Sprite {
     this.setCollideWorldBounds(true);
   }
 
-  update() {
+  update(time) {
     if (this.isDead || this.frozen) return;
 
-    // Check patrol boundaries
+    // Patrol
     if (this.x > this.startX + this.patrolDist) {
       this.direction = -1;
     } else if (this.x < this.startX - this.patrolDist) {
       this.direction = 1;
     }
 
-    // Check wall collisions
     if (this.body.blocked.left) {
       this.direction = 1;
     } else if (this.body.blocked.right) {
       this.direction = -1;
     }
 
-    // Always apply velocity based on direction
     this.setVelocityX(this.speed * this.direction);
     this.setFlipX(this.direction === -1);
+
+    // Shoot fireballs at nearby player
+    const player = this.scene.player;
+    if (player && !player.isDead && this.scene.dragonFireballGroup) {
+      const dx = player.x - this.x;
+      const dy = player.y - this.y;
+
+      if (Math.abs(dx) < 250 && Math.abs(dy) < 64) {
+        const now = time || Date.now();
+        if (now - this.lastFireTime > this.fireCooldown) {
+          this.lastFireTime = now;
+          const fireDir = dx > 0 ? 1 : -1;
+          const fb = new DragonFireball(this.scene, this.x, this.y, fireDir);
+          this.scene.dragonFireballGroup.add(fb);
+          SoundFX.play('dragonFire');
+        }
+      }
+    }
   }
 
   freeze(duration) {

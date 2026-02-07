@@ -1,9 +1,11 @@
 import Phaser from 'phaser';
 import { BUBBLE_FREEZE_DURATION } from '../config/gameConfig.js';
 import Bubble from '../entities/Bubble.js';
+import SoundFX from '../utils/SoundFX.js';
 
 export default class BubbleAttack {
   execute(scene, player) {
+    SoundFX.play('bubble');
     const bubble = new Bubble(scene, player.x, player.y);
     const freezeRadius = 150;
 
