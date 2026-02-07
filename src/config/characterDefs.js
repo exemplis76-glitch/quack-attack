@@ -1,0 +1,55 @@
+export const CHARACTERS = {
+  fireDucky: {
+    id: 'fireDucky',
+    name: 'Fire Ducky',
+    color: 0xff4400,
+    specialAttack: 'FireballAttack',
+    cost: 0,
+    description: 'Shoots fireballs horizontally!',
+    unlocked: true,
+  },
+  bubbleDucky: {
+    id: 'bubbleDucky',
+    name: 'Bubble Ducky',
+    color: 0x00ccff,
+    specialAttack: 'BubbleAttack',
+    cost: 25,
+    description: 'Freezes nearby octopuses in bubbles!',
+    unlocked: false,
+  },
+  lightningDucky: {
+    id: 'lightningDucky',
+    name: 'Lightning Ducky',
+    color: 0xffff00,
+    specialAttack: 'LightningAttack',
+    cost: 50,
+    description: 'Strikes all nearby enemies with lightning!',
+    unlocked: false,
+  },
+  bombingDucky: {
+    id: 'bombingDucky',
+    name: 'Bombing Ducky',
+    color: 0x333333,
+    specialAttack: 'BombAttack',
+    cost: 75,
+    description: 'Rains bombs from the sky!',
+    unlocked: false,
+  },
+  luckyDucky: {
+    id: 'luckyDucky',
+    name: 'Lucky Ducky',
+    color: 0x00ff88,
+    specialAttack: 'LuckyAttack',
+    cost: 100,
+    description: 'Randomly uses Bubble, Lightning, or Bomb!',
+    unlocked: false,
+  },
+};
+
+export const CHARACTER_ORDER = [
+  'fireDucky',
+  'bubbleDucky',
+  'lightningDucky',
+  'bombingDucky',
+  'luckyDucky',
+];
